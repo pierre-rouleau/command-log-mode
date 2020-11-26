@@ -58,7 +58,7 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
+(eval-when-compile (require 'cl-lib))
 
 (defvar clm/log-text t
   "A non-nil setting means text will be saved to the command log.")
@@ -278,7 +278,7 @@ Scrolling up can be accomplished with:
         (let ((current (current-buffer)))
           (goto-char (point-max))
           (cond ((and (not clm/log-repeat) (eq cmd clm/last-keyboard-command))
-                 (incf clm/command-repetitions)
+                 (cl-incf clm/command-repetitions)
                  (save-match-data
                    (when (and (> clm/command-repetitions 1)
                               (search-backward "[" (line-beginning-position -1) t))
