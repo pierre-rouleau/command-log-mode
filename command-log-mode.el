@@ -2,6 +2,7 @@
 
 ;; homepage: https://github.com/lewang/command-log-mode
 
+;; Copyright (C) 2020 Pierre Rouleau
 ;; Copyright (C) 2013 Nic Ferrier
 ;; Copyright (C) 2012 Le Wang
 ;; Copyright (C) 2004  Free Software Foundation, Inc.
@@ -26,6 +27,15 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
+;;; Notes - Pierre Rouleau updates
+;;  As of November 2020, the original code hosted
+;;  at https://github.com/lewang/command-log-mode
+;;  has a set of PR and bugs that have been waiting for some time.
+;;  For the moment I forked the lewang repo and implement the changes
+;;  that were requested.  If ther's interest in bringing these changes
+;;  back to the original repo, please let me know by adding a Issue with
+;;  a message to me.
+
 ;;; Commentary:
 
 ;; This add-on can be used to demo Emacs to an audience.  When
@@ -37,6 +47,8 @@
 ;; (require 'command-log-mode)
 ;; (add-hook 'LaTeX-mode-hook 'command-log-mode)
 ;;
+;; To enable, call M-x command-log-mode
+;; To log globally, M-X global-command-log
 ;; To see the log buffer, call M-x clm/open-command-log-buffer.
 
 ;; The key strokes in the log are decorated with ISO9601 timestamps on
@@ -178,7 +190,7 @@ If BUFFER is nil, the current buffer is assumed."
   "Opens (and creates, if non-existant) a buffer used for logging keyboard commands.
 If ARG is Non-nil, the existing command log buffer is cleared."
   (interactive "P")
-  (with-current-buffer 
+  (with-current-buffer
       (setq clm/command-log-buffer
             (get-buffer-create " *command-log*"))
     (text-scale-set 1))
@@ -291,7 +303,7 @@ Scrolling up can be accomplished with:
     (goto-char start)
     (let ((time (get-text-property (point) :time)))
       (if time
-	  (list (cons start (if time 
+	  (list (cons start (if time
 				(concat "[" (get-text-property (point) :time) "] ")
 			      "")))))))
 
