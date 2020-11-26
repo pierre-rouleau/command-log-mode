@@ -8,10 +8,15 @@ Show event history and command history of some or all buffers.
 
 ** Where is it from?
 
-This package is a fork of [[http://www.foldr.org/~michaelw/emacs/mwe-log-commands.el][mwe-log-commands.el]] by Michael Weber <michaelw@foldr.org>
+This package is a fork of
+[[https://github.com/lewang/command-log-mode][lewang/command-log-mode]] which is a fork of
+ [[http://www.foldr.org/~michaelw/emacs/mwe-log-commands.el][mwe-log-commands.el]] by Michael Weber <michaelw@foldr.org>
 
 ** How is it different?
 
 1. Remove "mwe-" prefix, but keep credits to mwe.
 2. Make minor-mode and global minor-mode.
 3. Hosted on github so pull requests, etc are easy.
+4. I integrated some PRs that were waiting in the [[https://github.com/lewang/command-log-mode][lewang/command-log-mode]]
+   for some time and did some more, waiting for activity to resume
+   in  [[https://github.com/lewang/command-log-mode][lewang/command-log-mode]].
