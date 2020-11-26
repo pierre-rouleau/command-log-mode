@@ -1,4 +1,4 @@
-;;; command-log-mode.el --- log keyboard commands to buffer
+;;; command-log-mode.el --- log keyboard commands to buffer  -*- lexical-binding: t; -*-
 
 ;; homepage: https://github.com/lewang/command-log-mode
 
@@ -310,8 +310,12 @@ Scrolling up can be accomplished with:
   (with-current-buffer clm/command-log-buffer
     (erase-buffer)))
 
-(defun clm/save-log-line (start end)
-  "Helper function for `clm/save-command-log' to export text properties."
+(defun clm/save-log-line (start _end)
+  "Helper function for `clm/save-command-log' to export text properties.
+
+The START argument identifies the region start point.
+The second argument, _END is unused but specified to conform to the
+signature required by the variable `write-region-annotate-functions'."
   (save-excursion
     (goto-char start)
     (let ((time (get-text-property (point) :time)))
