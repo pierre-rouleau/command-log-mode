@@ -63,9 +63,6 @@
 (defvar clm/log-text t
   "A non-nil setting means text will be saved to the command log.")
 
-(defvar clm/log-repeat nil
-  "A nil setting means repetitions of the same command are merged into the single log line.")
-
 (defvar clm/recent-history-string ""
   "This string will hold recently typed text.")
 
@@ -119,7 +116,7 @@ Frequently used non-interesting commands (like cursor movements) should be put h
   :type 'boolean)
 
 (defcustom command-log-mode-window-size 40
-  "The size of the command-log window."
+  "The width of the command-log window."
   :group 'command-log
   :type 'integer)
 
@@ -144,6 +141,12 @@ Frequently used non-interesting commands (like cursor movements) should be put h
   "Does turning on command-log-mode happen globally?"
   :group 'command-log
   :type 'boolean)
+
+(defcustom clm/log-repeat nil
+  "A nil setting means repetitions of the same command are merged into the single log line."
+  :group 'command-log
+  :type 'boolean)
+
 
 (defun clm/recent-history ()
   (setq clm/recent-history-string
