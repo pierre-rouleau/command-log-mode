@@ -190,16 +190,6 @@ If BUFFER is nil, the current buffer is assumed."
     (and (not (null val))
 	 (null (member cmd clm/log-command-exceptions*)))))
 
-(defmacro clm/save-command-environment (&rest body)
-  (declare (indent 0))
-  `(let ((deactivate-mark nil) ; do not deactivate mark in transient
-                                        ; mark mode
-	 ;; do not let random commands scribble over
-	 ;; {THIS,LAST}-COMMAND
-	 (this-command this-command)
-	 (last-command last-command))
-     ,@body))
-
 (defun clm/open-command-log-buffer (&optional arg)
   "Opens (and creates, if non-existant) a buffer used for logging keyboard commands.
 If ARG is Non-nil, the existing command log buffer is cleared."
@@ -271,7 +261,12 @@ Scrolling up can be accomplished with:
 
 (defun clm/log-command (&optional cmd)
   "Hook into `pre-command-hook' to intercept command activation."
-  (clm/save-command-environment
+  (let ((deactivate-mark nil) ; do not deactivate mark in transient mark mode
+        ;; Don't let random commands change `this-command' and `last-command'
+        ;; Emacs global variables by creating local lexical variables with
+        ;; their values.
+        (this-command this-command)
+        (last-command last-command))
     (setq cmd (or cmd this-command))
     (when (clm/buffer-log-command-p cmd)
       (clm/with-command-log-buffer
@@ -302,7 +297,7 @@ Scrolling up can be accomplished with:
                    (newline))
                  (move-to-column clm/log-command-indentation t)
                  (insert (if (byte-code-function-p cmd)
-                            "<bytecode>"
+                             "<bytecode>"
                            (propertize (format "%s" cmd)
                                        'face 'command-log-command)))
                  (newline)
