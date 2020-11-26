@@ -115,7 +115,8 @@ Frequently used non-interesting commands (like cursor movements) should be put h
   "*Indentation of commands in command log buffer.")
 
 (defgroup command-log nil
-  "Customization for the command log.")
+  "Customization for the command log."
+   :group 'convenience)
 
 (defface command-log-key
    '((t (:foreground "cyan")))
