@@ -74,6 +74,7 @@
 
 (defvar clm/log-command-exceptions*
   '(nil self-insert-command backward-char forward-char
+        right-char left-char
         delete-char delete-backward-char backward-delete-char
         backward-delete-char-untabify
         universal-argument universal-argument-other-key
@@ -137,6 +138,24 @@ Frequently used non-interesting commands (like cursor movements) should be put h
   :group 'command-log
   :type 'boolean)
 
+(defcustom command-log-mode-log-all nil
+  "Does command-log-mode log *all* commands?
+
+By default it does not log the commands identified
+in the list specified by the variable `clm/log-command-exceptions*'.
+
+If you set this to t, it ignores this list and log every command.
+Use function `clm/command-log-toggle-log-all' to modify the behaviour
+dynamically."
+  :group 'command-log
+  :type 'boolean)
+
+(defvar command-log-mode--log-all  command-log-mode-log-all
+  "When nil all commands except the ones listed in the variable
+clm/log-command-exceptions* are logged.
+If non-nil all commands are logged.
+Its value is initialized to the corresponding user option.")
+
 (defcustom command-log-mode-is-global nil
   "Does turning on command-log-mode happen globally?"
   :group 'command-log
@@ -182,13 +201,15 @@ Frequently used non-interesting commands (like cursor movements) should be put h
 
 (defun clm/buffer-log-command-p (cmd &optional buffer)
   "Determines whether keyboard command CMD should be logged.
-If non-nil, BUFFER specifies the buffer used to determine whether CMD should be logged.
-If BUFFER is nil, the current buffer is assumed."
+If non-nil, BUFFER specifies the buffer used to determine whether
+CMD should be logged.  If BUFFER is nil, the current buffer is
+assumed."
   (let ((val (if buffer
 		 (buffer-local-value command-log-mode buffer)
 	       command-log-mode)))
     (and (not (null val))
-	 (null (member cmd clm/log-command-exceptions*)))))
+         (or command-log-mode--log-all
+             (null (member cmd clm/log-command-exceptions*))))))
 
 (defun clm/open-command-log-buffer (&optional arg)
   "Opens (and creates, if non-existant) a buffer used for logging keyboard commands.
@@ -303,6 +324,11 @@ Scrolling up can be accomplished with:
                  (newline)
                  (setq clm/last-keyboard-command cmd)))
           (clm/scroll-buffer-window current))))))
+
+(defun clm/command-log-toggle-log-all ()
+  "Toggle logging all commands."
+  (interactive)
+  (setq command-log-mode--log-all (null command-log-mode--log-all)))
 
 (defun clm/command-log-clear ()
   "Clear the command log buffer."
