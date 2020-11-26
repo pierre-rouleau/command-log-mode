@@ -117,6 +117,16 @@ Frequently used non-interesting commands (like cursor movements) should be put h
 (defgroup command-log nil
   "Customization for the command log.")
 
+(defface command-log-key
+   '((t (:foreground "cyan")))
+   "Face for keys in command log."
+   :group 'command-log)
+
+(defface command-log-command
+  '((t (:foreground "pale green")))
+  "Face for commands in command log."
+  :group 'command-log)
+
 (defcustom command-log-mode-auto-show nil
   "Show the command-log window or frame automatically."
   :group 'command-log
@@ -282,11 +292,15 @@ Scrolling up can be accomplished with:
                  (insert
                   (propertize
                    (key-description (this-command-keys))
-                   :time  (format-time-string clm/time-string (current-time))))
+                   :time  (format-time-string clm/time-string (current-time))
+                   'face 'command-log-key))
                  (when (>= (current-column) clm/log-command-indentation)
                    (newline))
                  (move-to-column clm/log-command-indentation t)
-                 (princ (if (byte-code-function-p cmd) "<bytecode>" cmd) current)
+                 (insert (if (byte-code-function-p cmd)
+                            "<bytecode>"
+                           (propertize (format "%s" cmd)
+                                       'face 'command-log-command)))
                  (newline)
                  (setq clm/last-keyboard-command cmd)))
           (clm/scroll-buffer-window current))))))
