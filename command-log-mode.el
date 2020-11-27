@@ -72,19 +72,49 @@
 (defvar clm/logging-dir "~/log/"
   "Directory in which to store files containing logged commands.")
 
-(defvar clm/log-command-exceptions*
-  '(nil self-insert-command backward-char forward-char
-        right-char left-char
-        delete-char delete-backward-char backward-delete-char
-        backward-delete-char-untabify
-        universal-argument universal-argument-other-key
-        universal-argument-minus universal-argument-more
-        beginning-of-line end-of-line recenter
-        move-end-of-line move-beginning-of-line
-        handle-switch-frame
-        newline previous-line next-line)
-  "A list commands which should not be logged, despite logging being enabled.
-Frequently used non-interesting commands (like cursor movements) should be put here.")
+(defcustom clm/non-logged-commands
+  '(nil
+    backward-char
+    backward-delete-char
+    backward-delete-char-untabify
+    beginning-of-line
+    delete-backward-char
+    delete-char
+    end-of-line
+    forward-char
+    handle-switch-frame
+    left-char
+    move-beginning-of-line
+    move-end-of-line
+    newline
+    next-line
+    previous-line
+    recenter
+    right-char
+    self-insert-command
+    universal-argument
+    universal-argument-minus
+    universal-argument-more
+    universal-argument-other-key)
+  "A list commands not be logged, despite logging being enabled.
+Frequently used non-interesting commands (like cursor movements)
+should be put here.
+
+If you do not want to see key sequences or mouse events not bound
+to Emacs commands add the symbol nil to the list.
+
+Use the clm/toggle-log-all command to activate or ignore
+this list.  Also see the command-log-mode-log-all user option
+which determines if this filtering is activated by default."
+  :group 'command-log
+  :type '(repeat
+          (symbol :tag "command function name")))
+
+
+(defvar clm/--non-logged-commands clm/non-logged-commands
+  "A list commands not be logged, despite logging being enabled.
+Frequently used non-interesting commands (like cursor movements)
+should be put here.")
 
 (defvar clm/command-log-buffer nil
   "Reference of the currenly used buffer to display logged commands.")
@@ -142,7 +172,7 @@ Frequently used non-interesting commands (like cursor movements) should be put h
   "Does command-log-mode log *all* commands?
 
 By default it does not log the commands identified
-in the list specified by the variable `clm/log-command-exceptions*'.
+in the list specified by the variable `clm/--non-logged-commands'.
 
 If you set this to t, it ignores this list and log every command.
 Use function `clm/toggle-log-all' to modify the behaviour
@@ -152,7 +182,7 @@ dynamically."
 
 (defvar command-log-mode--log-all  command-log-mode-log-all
   "When nil all commands except the ones listed in the variable
-clm/log-command-exceptions* are logged.
+clm/--non-logged-commands are logged.
 If non-nil all commands are logged.
 Its value is initialized to the corresponding user option.")
 
@@ -176,7 +206,7 @@ Its value is initialized to the corresponding user option.")
 
 (defun clm/zap-recent-history ()
   (unless (or (member this-original-command
-		      clm/log-command-exceptions*)
+		      clm/--non-logged-commands)
 	      (eq this-original-command #'self-insert-command))
     (setq clm/recent-history-string "")))
 
@@ -209,7 +239,7 @@ assumed."
 	       command-log-mode)))
     (and (not (null val))
          (or command-log-mode--log-all
-             (null (member cmd clm/log-command-exceptions*))))))
+             (null (member cmd clm/--non-logged-commands))))))
 
 (defun clm/open-command-log-buffer (&optional arg)
   "Opens (and creates, if non-existant) a buffer used for logging keyboard commands.
@@ -328,7 +358,11 @@ Scrolling up can be accomplished with:
 (defun clm/toggle-log-all ()
   "Toggle logging of all commands."
   (interactive)
-  (setq command-log-mode--log-all (null command-log-mode--log-all)))
+  (setq command-log-mode--log-all (null command-log-mode--log-all))
+  (message "command log: now low %s"
+           (if command-log-mode--log-all
+               "all commands, even unknown key sequences."
+             "only commands not listed in clm/non-logged-commands.")))
 
 (defun clm/command-log-clear ()
   "Clear the command log buffer."
