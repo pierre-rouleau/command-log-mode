@@ -31,9 +31,9 @@
 ;;  As of November 2020, the original code hosted
 ;;  at https://github.com/lewang/command-log-mode
 ;;  has a set of PR and bugs that have been waiting for some time.
-;;  For the moment I forked the lewang repo and implement the changes
-;;  that were requested.  If ther's interest in bringing these changes
-;;  back to the original repo, please let me know by adding a Issue with
+;;  For the moment I forked the lewang repo and implemented the changes
+;;  that were requested.  If there's interest in bringing these changes
+;;  back to the original repo, please let me know by adding a issue with
 ;;  a message to me.
 
 ;;; Commentary:
