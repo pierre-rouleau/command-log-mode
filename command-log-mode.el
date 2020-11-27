@@ -104,7 +104,7 @@ If you do not want to see key sequences or mouse events not bound
 to Emacs commands add the symbol nil to the list.
 
 Use the clm/toggle-log-all command to activate or ignore
-this list.  Also see the command-log-mode-log-all user option
+this list.  Also see the clm/log-all user option
 which determines if this filtering is activated by default."
   :group 'command-log
   :type '(repeat
@@ -168,7 +168,7 @@ should be put here.")
   :group 'command-log
   :type 'boolean)
 
-(defcustom command-log-mode-log-all nil
+(defcustom clm/log-all nil
   "Does command-log-mode log *all* commands?
 
 By default it does not log the commands identified
@@ -180,7 +180,7 @@ dynamically."
   :group 'command-log
   :type 'boolean)
 
-(defvar command-log-mode--log-all  command-log-mode-log-all
+(defvar command-log-mode--log-all  clm/log-all
   "When nil all commands except the ones listed in the variable
 clm/--non-logged-commands are logged.
 If non-nil all commands are logged.
