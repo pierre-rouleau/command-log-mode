@@ -145,7 +145,7 @@ By default it does not log the commands identified
 in the list specified by the variable `clm/log-command-exceptions*'.
 
 If you set this to t, it ignores this list and log every command.
-Use function `clm/command-log-toggle-log-all' to modify the behaviour
+Use function `clm/toggle-log-all' to modify the behaviour
 dynamically."
   :group 'command-log
   :type 'boolean)
@@ -325,8 +325,8 @@ Scrolling up can be accomplished with:
                  (setq clm/last-keyboard-command cmd)))
           (clm/scroll-buffer-window current))))))
 
-(defun clm/command-log-toggle-log-all ()
-  "Toggle logging all commands."
+(defun clm/toggle-log-all ()
+  "Toggle logging of all commands."
   (interactive)
   (setq command-log-mode--log-all (null command-log-mode--log-all)))
 
