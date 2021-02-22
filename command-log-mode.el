@@ -151,8 +151,10 @@ should be put here.")
   :group 'command-log
   :type 'integer)
 
-(defcustom command-log-mode-window-font-size 2
-  "The font-size of the command-log window."
+(defcustom command-log-mode-window-text-scale 0
+  "The text scale of the command-log window.
+
++1,+2,... increase and -1,-2,... decrease the font size."
   :group 'command-log
   :type 'integer)
 
@@ -248,7 +250,7 @@ If ARG is Non-nil, the existing command log buffer is cleared."
   (with-current-buffer
       (setq clm/command-log-buffer
             (get-buffer-create " *command-log*"))
-    (text-scale-set 1))
+    (text-scale-set command-log-mode-window-text-scale))
   (when arg
     (with-current-buffer clm/command-log-buffer
       (erase-buffer)))
